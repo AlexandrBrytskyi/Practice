@@ -11,6 +11,7 @@
 target
 out
 temp
+<<<<<<< HEAD
 target/*
 out/*
 temp/*
