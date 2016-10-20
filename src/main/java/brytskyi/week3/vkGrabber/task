@@ -1,0 +1,9 @@
+7. Create client database using vk searching https://vk.com/search
+	Main search criteries (country - Ukraine, city - Kiev, age - 14-35)
+	Other key words (we will define some words, example [it,java,kpi,nau,programming,game,gaming])
+
+1) find people by main criteries via vk search
+2) open every page, and look for key word
+3) if we find at least 3 words -> grab all importand info
+	vk id or page reference, Name, Contacts, age, birthsday, education, work
+4) save results into file(json) using gson library
