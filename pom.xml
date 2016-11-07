@@ -28,6 +28,7 @@
 
         <jsoup.version>1.9.2</jsoup.version>
         <sdk.version>0.3.1</sdk.version>
+        <mysql-connector-java.version>6.0.5</mysql-connector-java.version>
     </properties>
 
     <dependencies>
@@ -50,6 +51,14 @@
             <artifactId>junit</artifactId>
             <version>LATEST</version>
         </dependency>
+
+
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>${mysql-connector-java.version}</version>
+        </dependency>
+
 
 
     </dependencies>

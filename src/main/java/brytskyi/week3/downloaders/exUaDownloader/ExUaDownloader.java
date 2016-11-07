@@ -106,7 +106,6 @@ public class ExUaDownloader {
         Thread percents = new Thread(new Runnable() {
             @Override
             public void run() {
-                final String os = System.getProperty("os.name");
                 while (isDownloading) {
                     try {
                         Thread.currentThread().sleep(1000);
