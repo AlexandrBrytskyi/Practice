@@ -1,4 +1,4 @@
-package brytskyi.week6.sql.notebook_shop.model;
+package brytskyi.week6.sql.notebook_shop.model.production;
 
 /**
  * Created by alexandr on 05.11.16.
@@ -42,6 +42,24 @@ public class Processor {
 
     public void setFrequency(int frequency) {
         this.frequency = frequency;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Processor processor = (Processor) o;
+
+        if (id != processor.id) return false;
+        if (frequency != processor.frequency) return false;
+        return company != null ? company.equals(processor.company) : processor.company == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        return id;
     }
 
     @Override

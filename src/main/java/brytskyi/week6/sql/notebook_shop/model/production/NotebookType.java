@@ -1,4 +1,4 @@
-package brytskyi.week6.sql.notebook_shop.model;
+package brytskyi.week6.sql.notebook_shop.model.production;
 
 /**
  * Created by alexandr on 05.11.16.
@@ -16,7 +16,6 @@ public class NotebookType {
     private double price;
 
 
-    // TODO: 07.11.16 display miis in type!!!
     public NotebookType(int id, String desc, Memory hardMemory, Memory operativeMemory, Processor processor, Memory videoMemory, NotebookModel model, double price, Display display) {
         this.id = id;
         this.desc = desc;
@@ -110,6 +109,31 @@ public class NotebookType {
 
     public void setDesc(String desc) {
         this.desc = desc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        NotebookType that = (NotebookType) o;
+
+        if (id != that.id) return false;
+        if (Double.compare(that.price, price) != 0) return false;
+        if (desc != null ? !desc.equals(that.desc) : that.desc != null) return false;
+        if (hardMemory != null ? !hardMemory.equals(that.hardMemory) : that.hardMemory != null) return false;
+        if (operativeMemory != null ? !operativeMemory.equals(that.operativeMemory) : that.operativeMemory != null)
+            return false;
+        if (processor != null ? !processor.equals(that.processor) : that.processor != null) return false;
+        if (videoMemory != null ? !videoMemory.equals(that.videoMemory) : that.videoMemory != null) return false;
+        if (model != null ? !model.equals(that.model) : that.model != null) return false;
+        return display != null ? display.equals(that.display) : that.display == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        return id;
     }
 
     @Override

@@ -1,11 +1,18 @@
 package week6.sql.networkshop.dao.sql_dao;
 
 import brytskyi.week6.sql.notebook_shop.dao.sql_dao.MySQL_DAO;
-import brytskyi.week6.sql.notebook_shop.dao.sql_dao.NullFieldException;
-import brytskyi.week6.sql.notebook_shop.model.*;
+import brytskyi.week6.sql.notebook_shop.model.exceptions.dao_exceptions.NullFieldException;
+import brytskyi.week6.sql.notebook_shop.model.production.*;
+import brytskyi.week6.sql.notebook_shop.model.selling.Prodaja;
+import brytskyi.week6.sql.notebook_shop.model.users.Buyer;
+import brytskyi.week6.sql.notebook_shop.model.users.Contacts;
+import brytskyi.week6.sql.notebook_shop.model.users.Seller;
 import org.junit.*;
 import org.junit.runners.MethodSorters;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -26,6 +33,8 @@ public class TestProductionDao {
     private static VideoMemory videoMemory;
     private static NotebookType notebookType;
     private static NotebookForSail notebookForSail;
+    private static Buyer buyer;
+    private static Seller seller;
 
     @BeforeClass
     public static void initDao() {
@@ -204,7 +213,7 @@ public class TestProductionDao {
 
     @Test
     public void _19testAddNotebookType() {
-        NotebookType notebookType = new NotebookType("Test adding", hardMemory, operativeMemory, processor, videoMemory, notebookModel,display, 5000);
+        NotebookType notebookType = new NotebookType("Test adding", hardMemory, operativeMemory, processor, videoMemory, notebookModel, display, 5000);
         System.out.println(display);
        /*if all is ok*/
         try {
@@ -227,7 +236,7 @@ public class TestProductionDao {
 
     @Test
     public void _20testRemoveNotebookType() {
-        NotebookType notebookType = new NotebookType("Test adding", hardMemory, operativeMemory, processor, videoMemory, notebookModel,display, 5000);
+        NotebookType notebookType = new NotebookType("Test adding", hardMemory, operativeMemory, processor, videoMemory, notebookModel, display, 5000);
         try {
             NotebookType added = dao.addNotebookType(notebookType);
             Assert.assertNotNull(added);
@@ -272,11 +281,9 @@ public class TestProductionDao {
     @Test
     public void _23updateNotebookForSailTest() {
         System.out.println("Notebook for sail = " + notebookForSail);
-        notebookForSail.setState(NotebookState.SELLED);
-        System.out.println("Notebook for sail changed = " + notebookForSail);
         try {
-            NotebookForSail updated = dao.updateNotebook(notebookForSail);
-            Assert.assertEquals(notebookForSail, updated);
+            NotebookForSail updated = dao.updateNotebook(notebookForSail.getId(), NotebookState.SELLED.toString());
+            Assert.assertEquals(updated.getState(), NotebookState.SELLED);
             System.out.println();
         } catch (NullFieldException e) {
             e.printStackTrace();
@@ -290,7 +297,7 @@ public class TestProductionDao {
         long temp = System.currentTimeMillis();
 
         NotebookType type = new NotebookType("test 24", hardMemory, operativeMemory, dao.addProcessor(new Processor("AMD" + temp, 3500)),
-                videoMemory, dao.addNotebookModel(new NotebookModel("gavno kota", "kakashka 2000")),display, 5000);
+                videoMemory, dao.addNotebookModel(new NotebookModel("gavno kota", "kakashka 2000")), display, 5000);
         try {
             type = dao.addNotebookType(type);
         } catch (NullFieldException e) {
@@ -324,8 +331,8 @@ public class TestProductionDao {
     public void _25getNotebooksByOperativeMemoryTest() {
         long temp = System.currentTimeMillis();
 
-        NotebookType type = new NotebookType("test 25", hardMemory, dao.addOperativeMemory(new OperativeMemory("huychik", (int) (9000+temp))), processor,
-                videoMemory, dao.addNotebookModel(new NotebookModel("gavno kota", "kakashka 2000")),display, 5000);
+        NotebookType type = new NotebookType("test 25", hardMemory, dao.addOperativeMemory(new OperativeMemory("huychik", (int) (9000 + temp))), processor,
+                videoMemory, dao.addNotebookModel(new NotebookModel("gavno kota", "kakashka 2000")), display, 5000);
         try {
             type = dao.addNotebookType(type);
         } catch (NullFieldException e) {
@@ -347,7 +354,7 @@ public class TestProductionDao {
             Assert.assertTrue(false);
         }
 
-        List<NotebookForSail> res = dao.getNotebooks((int) (9000+temp), NotebookState.NEW);
+        List<NotebookForSail> res = dao.getNotebooks((int) (9000 + temp), NotebookState.NEW);
         Assert.assertTrue(res.size() == 2);
         System.out.println();
         for (NotebookForSail re : res) {
@@ -359,8 +366,8 @@ public class TestProductionDao {
     public void _26getNotebooksByDisplaysTest() {
         long temp = System.currentTimeMillis();
 
-        NotebookType type = new NotebookType("test 26", hardMemory, dao.addOperativeMemory(new OperativeMemory("huychik", (int) (9000+temp))), processor,
-                videoMemory, dao.addNotebookModel(new NotebookModel("gavno kota", "kakashka 2000")),dao.addDisplay(new Display((int) (900+temp),(int)(600+temp))), 5000);
+        NotebookType type = new NotebookType("test 26", hardMemory, dao.addOperativeMemory(new OperativeMemory("huychik", (int) (9000 + temp))), processor,
+                videoMemory, dao.addNotebookModel(new NotebookModel("gavno kota", "kakashka 2000")), dao.addDisplay(new Display((int) (900 + temp), (int) (600 + temp))), 5000);
         try {
             type = dao.addNotebookType(type);
         } catch (NullFieldException e) {
@@ -382,12 +389,97 @@ public class TestProductionDao {
             Assert.assertTrue(false);
         }
 
-        List<NotebookForSail> res = dao.getNotebooks((int) (900+temp),(int)(600+temp), NotebookState.NEW);
-        Assert.assertTrue(res.size() == 2);
+        List<NotebookForSail> res = dao.getNotebooks((int) (900 + temp), (int) (600 + temp), NotebookState.NEW);
         System.out.println();
         for (NotebookForSail re : res) {
             System.out.println(re);
         }
+        Assert.assertTrue(res.size() == 2);
     }
+
+    @Test
+    public void _27addBuyerTest() {
+        buyer = new Buyer(new Contacts("Vasia", "Petia", "+380973991848"));
+        try {
+            buyer = dao.addBuyer(buyer);
+            Assert.assertNotNull(buyer);
+        } catch (NullFieldException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
+    @Test
+    public void _28getBuyersTest() {
+        buyer = new Buyer(new Contacts("Vasia", "Petia", "+380973991848"));
+        try {
+            buyer = dao.addBuyer(buyer);
+            List<Buyer> buyers = dao.getAllBuyers();
+            System.out.println("All buyers " + buyers);
+            Buyer last = buyers.get(buyers.size() - 1);
+            Assert.assertEquals(buyer, last);
+        } catch (NullFieldException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    @Test
+    public void _29addSellerTest() {
+        seller = new Seller(new Contacts("Huy", "Sabaka", "+380973991848"), 5000,"");
+        try {
+            seller = dao.addSeller(seller);
+            Assert.assertNotNull(seller);
+        } catch (NullFieldException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
+    @Test
+    public void _28getSellersTest() {
+        seller = new Seller(new Contacts("Vasia", "Petia", "+380973991848"), 8000,"");
+        try {
+            seller = dao.addSeller(seller);
+            List<Seller> sellers = dao.getSellers(true);
+            System.out.println("All sellers " + sellers);
+            Seller last = sellers.get(sellers.size() - 1);
+            Assert.assertEquals(seller, last);
+        } catch (NullFieldException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void _29updateSellerTest() {
+        seller = new Seller(new Contacts("Vasia", "Petia", "+380973991848"), 8000,"");
+        try {
+            seller = dao.addSeller(seller);
+            seller.setWorking(false);
+            seller = dao.updateSeller(seller.getId(), false);
+            Assert.assertFalse(seller.isWorking());
+        } catch (NullFieldException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    @Test
+    public void _30addProdajaTest() {
+
+        Date start = Date.from(LocalDate.now().minusDays(1).atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
+        Date end = Date.from(LocalDate.now().plusDays(1).atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
+        try {
+            Prodaja prodaja = dao.addProdaja(new Prodaja(buyer, seller, notebookForSail));
+            List prodajas1 = dao.getProdajasBuyer(buyer.getId(), start, end);
+            List prodajas2 = dao.getProdajasSeller(seller.getId(), start, end);
+            Assert.assertEquals(prodajas1.get(0), prodajas2.get(0));
+        } catch (NullFieldException e) {
+            e.printStackTrace();
+        }
+    }
+
 
 }

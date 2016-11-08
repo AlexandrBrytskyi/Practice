@@ -1,19 +1,24 @@
 package brytskyi.week6.sql.notebook_shop.dao.sql_dao;
 
 import brytskyi.week6.sql.notebook_shop.dao.IProductionDao;
-import brytskyi.week6.sql.notebook_shop.model.*;
+import brytskyi.week6.sql.notebook_shop.dao.ISellingDAO;
+import brytskyi.week6.sql.notebook_shop.dao.IUsersDao;
+import brytskyi.week6.sql.notebook_shop.model.exceptions.dao_exceptions.NullFieldException;
+import brytskyi.week6.sql.notebook_shop.model.production.*;
+import brytskyi.week6.sql.notebook_shop.model.selling.Prodaja;
+import brytskyi.week6.sql.notebook_shop.model.users.Buyer;
+import brytskyi.week6.sql.notebook_shop.model.users.Contacts;
+import brytskyi.week6.sql.notebook_shop.model.users.Seller;
 
 
 import java.sql.*;
+import java.util.*;
 import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.NoSuchElementException;
 
 /**
  * Created by alexandr on 05.11.16.
  */
-public class MySQL_DAO implements IProductionDao {
+public class MySQL_DAO implements IProductionDao, ISellingDAO, IUsersDao {
 
     public static final String DB_URL = "jdbc:mysql://localhost:3306/notebookDB";
     public static final String USER = "root";
@@ -620,27 +625,47 @@ public class MySQL_DAO implements IProductionDao {
     }
 
     @Override
-    public NotebookForSail updateNotebook(NotebookForSail notebookForSail) throws NullFieldException {
-        if (notebookForSail == null) throw new NullPointerException("Notebook for sail is null");
+    public NotebookForSail updateNotebook(int id, String state) throws NullFieldException {
         try (PreparedStatement ps = connection.prepareStatement("UPDATE notebooks_for_sail n SET " +
-                "notebook_type=?,serial_num=?,partiya=?,state=?,dateStateChanged=? WHERE n.id=?")) {
-            ps.setInt(1, notebookForSail.getType().getId());
-            ps.setString(2, notebookForSail.getSerial());
-            ps.setInt(3, notebookForSail.getPartiya().getId());
-            ps.setString(4, notebookForSail.getState().toString());
-            ps.setTimestamp(5, new Timestamp(notebookForSail.getDateStateChanged().getTime()));
-            ps.setInt(6, notebookForSail.getId());
+                "state=?, n.dateStateChanged=? WHERE n.id=?")) {
+            ps.setString(1, state);
+            ps.setInt(3, id);
+            ps.setTimestamp(2, new Timestamp(new Date().getTime()));
             if (ps.executeUpdate() == 1) {
-                return notebookForSail;
+                return getNotebookForSail(id);
             }
             return null;
         } catch (SQLException e) {
             e.printStackTrace();
             return null;
         } catch (NullPointerException e) {
+            e.printStackTrace();
             throw new NullFieldException(e.getMessage());
         }
     }
+
+
+    private NotebookForSail getNotebookForSail(int id) {
+        try (PreparedStatement ps = connection.prepareStatement("SELECT * " +
+                "FROM notebooks_for_sail n WHERE n.id = ?")) {
+            ps.setInt(1, id);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return new NotebookForSail(rs.getInt("id"),
+                            getNotebookTypeById(rs.getInt("notebook_type")),
+                            rs.getString("serial_num"),
+                            null,
+                            NotebookState.valueOf(rs.getString("state")),
+                            rs.getTimestamp("dateStateChanged"));
+                }
+                return null;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 
     @Override
     public List<NotebookForSail> getNotebooks(String company, NotebookState state) {
@@ -753,4 +778,274 @@ public class MySQL_DAO implements IProductionDao {
             return null;
         }
     }
+
+    @Override
+    public Buyer addBuyer(Buyer buyer) throws NullFieldException {
+        try (PreparedStatement ps = connection.prepareStatement("INSERT INTO buyers(" +
+                "contact, money) VALUES (?,?)", Statement.RETURN_GENERATED_KEYS)) {
+            ps.setInt(1, addContact(buyer.getContacts()).getId());
+            ps.setDouble(2, buyer.getMoneySpent());
+            if (ps.executeUpdate() == 1) {
+                try (ResultSet rs = ps.getGeneratedKeys()) {
+                    if (rs.next()) {
+                        buyer.setId(rs.getInt(1));
+                        return buyer;
+                    }
+                }
+            }
+            return null;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private Contacts addContact(Contacts contacts) throws NullFieldException {
+        try (PreparedStatement ps = connection.prepareStatement("INSERT INTO contacts(" +
+                "name, surname, phone) VALUES (?,?,?)", Statement.RETURN_GENERATED_KEYS)) {
+            ps.setString(1, contacts.getName());
+            ps.setString(2, contacts.getSurname());
+            ps.setString(3, contacts.getPhone());
+            if (ps.executeUpdate() == 1) {
+                try (ResultSet rs = ps.getGeneratedKeys()) {
+                    if (rs.next()) {
+                        contacts.setId(rs.getInt(1));
+                        return contacts;
+                    }
+                }
+            }
+            return null;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        } catch (NullPointerException e) {
+            throw new NullFieldException(e.getMessage());
+        }
+    }
+
+    private Contacts getContact(int id) {
+        try (PreparedStatement ps = connection.prepareStatement("SELECT * FROM contacts c WHERE " +
+                "c.id = ?")) {
+            ps.setInt(1, id);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return new Contacts(rs.getInt("id"), rs.getString("name"), rs.getString("surname"), rs.getString("phone"));
+                }
+            }
+            return null;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public List<Buyer> getAllBuyers() {
+        List<Buyer> buyers = new LinkedList<>();
+        try (PreparedStatement ps = connection.prepareStatement("SELECT * FROM buyers")) {
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    buyers.add(new Buyer(rs.getInt("id"), getContact(rs.getInt("contact")), new LinkedList<NotebookForSail>(), rs.getDouble("money")));
+                }
+            }
+            return buyers;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public Seller addSeller(Seller seller) throws NullFieldException {
+        try (PreparedStatement ps = connection.prepareStatement("INSERT INTO sellers(" +
+                "contact, salary, isworking) VALUES (?,?,?)", Statement.RETURN_GENERATED_KEYS)) {
+            ps.setInt(1, addContact(seller.getContacts()).getId());
+            ps.setDouble(2, seller.getSalary());
+            ps.setBoolean(3, seller.isWorking());
+            if (ps.executeUpdate() == 1) {
+                try (ResultSet rs = ps.getGeneratedKeys()) {
+                    if (rs.next()) {
+                        seller.setId(rs.getInt(1));
+                        return seller;
+                    }
+                }
+            }
+            return null;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public List<Seller> getSellers(boolean working) {
+        List<Seller> sellers = new LinkedList<>();
+        try (PreparedStatement ps = connection.prepareStatement("SELECT * FROM sellers s WHERE s.isworking = ?")) {
+            ps.setBoolean(1, working);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    sellers.add(new Seller(rs.getInt("id"), getContact(rs.getInt("contact")), new LinkedList<NotebookForSail>(),
+                            rs.getDouble("salary"), rs.getBoolean("isworking"),""));
+                }
+            }
+            return sellers;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
+    @Override
+    public Seller updateSeller(int sellerID, boolean isWorking) {
+        try (PreparedStatement ps = connection.prepareStatement("UPDATE sellers s SET s.isworking = ? WHERE s.id = ?")) {
+            ps.setBoolean(1, isWorking);
+            ps.setInt(2, sellerID);
+            if (ps.executeUpdate() == 1) {
+                return getSeller(sellerID);
+            }
+            return null;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public Buyer getBuyer(String phone) {
+        try (PreparedStatement ps = connection.prepareStatement("SELECT * FROM buyers b WHERE b.phone = ?")) {
+            ps.setString(1, phone);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return new Buyer(rs.getInt("id"), getContact(rs.getInt("contact")), new LinkedList<NotebookForSail>(),
+                            rs.getDouble("money"));
+                }
+            }
+            return null;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public Seller getSeller(String name, String pass) {
+        try (PreparedStatement ps = connection.prepareStatement("SELECT * FROM sellers s " +
+                "INNER JOIN contcts c  on s.id = c.id WHERE c.name = ? AND s.pass = ?")) {
+            ps.setString(1, name);
+            ps.setString(1, pass);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return new Seller(rs.getInt("id"), getContact(rs.getInt("contact")), new LinkedList<NotebookForSail>(),
+                            rs.getDouble("salary"), rs.getBoolean("isworking"), "");
+                }
+            }
+            return null;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private Seller getSeller(int sellerID) {
+        try (PreparedStatement ps = connection.prepareStatement("SELECT * FROM sellers s WHERE s.id = ?")) {
+            ps.setInt(1, sellerID);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return new Seller(rs.getInt("id"), getContact(rs.getInt("contact")), new LinkedList<NotebookForSail>(),
+                            rs.getDouble("salary"), rs.getBoolean("isworking"),"");
+                }
+            }
+            return null;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private Buyer getBuyer(int buyerId) {
+        try (PreparedStatement ps = connection.prepareStatement("SELECT * FROM buyers b WHERE b.id = ?")) {
+            ps.setInt(1, buyerId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return new Buyer(rs.getInt("id"), getContact(rs.getInt("contact")), new LinkedList<NotebookForSail>(),
+                            rs.getDouble("money"));
+                }
+            }
+            return null;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public Prodaja addProdaja(Prodaja prodaja) throws NullFieldException {
+        try (PreparedStatement ps = connection.prepareStatement("INSERT INTO prodajas(" +
+                "buyer, seller, notebook) VALUES (?,?,?)", Statement.RETURN_GENERATED_KEYS)) {
+            ps.setInt(1, prodaja.getBuyer().getId());
+            ps.setInt(2, prodaja.getSeller().getId());
+            ps.setInt(3, prodaja.getNotebookForSail().getId());
+            if (ps.executeUpdate() == 1) {
+                try (ResultSet rs = ps.getGeneratedKeys()) {
+                    if (rs.next()) {
+                        prodaja.setId(rs.getInt(1));
+                        return prodaja;
+                    }
+                }
+            }
+            return null;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        } catch (NullPointerException e) {
+            throw new NullFieldException(e.getMessage());
+        }
+    }
+
+    public List<Prodaja> getProdajasBuyer(int buyer, Date begin, Date end) {
+        List<Prodaja> prodajas = new LinkedList<>();
+        try (PreparedStatement ps = connection.prepareStatement("SELECT * FROM prodajas p" +
+                " INNER JOIN notebooks_for_sail n ON (p.notebook=n.id) WHERE" +
+                " p.buyer=? and n.dateStateChanged BETWEEN ? AND ?")) {
+            ps.setInt(1, buyer);
+            ps.setDate(2, new java.sql.Date(begin.getTime()));
+            ps.setDate(3, new java.sql.Date(end.getTime()));
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    prodajas.add(new Prodaja(rs.getInt("id"), getBuyer(rs.getInt("buyer")), getSeller(rs.getInt("seller")),
+                            getNotebookForSail(rs.getInt("notebook"))));
+                }
+            }
+            return prodajas;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public List<Prodaja> getProdajasSeller(int seller, Date begin, Date end) {
+        List<Prodaja> prodajas = new LinkedList<>();
+        try (PreparedStatement ps = connection.prepareStatement("SELECT * FROM prodajas p" +
+                " INNER JOIN notebooks_for_sail n ON (p.notebook=n.id) WHERE" +
+                " p.seller=? and n.dateStateChanged BETWEEN ? AND ?")) {
+            ps.setInt(1, seller);
+            ps.setDate(2, new java.sql.Date(begin.getTime()));
+            ps.setDate(3, new java.sql.Date(end.getTime()));
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    prodajas.add(new Prodaja(rs.getInt("id"), getBuyer(rs.getInt("buyer")), getSeller(rs.getInt("seller")),
+                            getNotebookForSail(rs.getInt("notebook"))));
+                }
+            }
+            return prodajas;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
+
 }

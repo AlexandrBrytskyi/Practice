@@ -74,3 +74,37 @@ CREATE TABLE partiyas (
 
 ALTER TABLE notebooks_for_sail
   ADD FOREIGN KEY (partiya) REFERENCES partiyas (id);
+
+CREATE TABLE contacts (
+  id      INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  name    VARCHAR(255),
+  surname VARCHAR(255),
+  phone   VARCHAR(20)
+);
+
+CREATE TABLE buyers (
+  id      INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  contact INTEGER NOT NULL,
+  money   DOUBLE,
+  FOREIGN KEY (contact) REFERENCES contacts (id)
+);
+
+CREATE TABLE sellers (
+  id      INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  contact INTEGER NOT NULL,
+  salary  DOUBLE,
+  FOREIGN KEY (contact) REFERENCES contacts (id)
+);
+
+CREATE TABLE prodajas (
+  id       INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  buyer    INTEGER,
+  seller   INTEGER,
+  notebook INTEGER,
+  FOREIGN KEY (buyer) REFERENCES buyers (id),
+  FOREIGN KEY (seller) REFERENCES sellers (id),
+  FOREIGN KEY (notebook) REFERENCES notebooks_for_sail (id)
+);
+
+ALTER TABLE sellers ADD isworking BOOLEAN;
+ALTER TABLE sellers ADD pass VARCHAR(255);

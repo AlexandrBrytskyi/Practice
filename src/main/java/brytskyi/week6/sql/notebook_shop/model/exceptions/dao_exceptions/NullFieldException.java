@@ -1,4 +1,4 @@
-package brytskyi.week6.sql.notebook_shop.dao.sql_dao;
+package brytskyi.week6.sql.notebook_shop.model.exceptions.dao_exceptions;
 
 /**
  * Created by alexandr on 07.11.16.

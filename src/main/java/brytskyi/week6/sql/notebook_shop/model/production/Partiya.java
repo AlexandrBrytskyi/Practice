@@ -1,4 +1,4 @@
-package brytskyi.week6.sql.notebook_shop.model;
+package brytskyi.week6.sql.notebook_shop.model.production;
 
 import java.util.Date;
 import java.util.List;
@@ -81,6 +81,27 @@ public class Partiya {
         this.dateOfTake = dateOfTake;
     }
 
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Partiya partiya = (Partiya) o;
+
+        if (id != partiya.id) return false;
+        if (Double.compare(partiya.price, price) != 0) return false;
+        if (amountOfNotebooks != partiya.amountOfNotebooks) return false;
+        if (patriyaType != null ? !patriyaType.equals(partiya.patriyaType) : partiya.patriyaType != null) return false;
+        if (dateOfTake != null ? !dateOfTake.equals(partiya.dateOfTake) : partiya.dateOfTake != null) return false;
+        return notebooks != null ? notebooks.equals(partiya.notebooks) : partiya.notebooks == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        return id;
+    }
 
     @Override
     public String toString() {

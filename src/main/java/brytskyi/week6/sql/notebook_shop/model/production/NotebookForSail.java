@@ -1,4 +1,4 @@
-package brytskyi.week6.sql.notebook_shop.model;
+package brytskyi.week6.sql.notebook_shop.model.production;
 
 import java.util.Date;
 

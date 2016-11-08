@@ -1,22 +1,22 @@
-package brytskyi.week6.sql.notebook_shop.model;
+package brytskyi.week6.sql.notebook_shop.model.production;
 
 /**
  * Created by alexandr on 05.11.16.
  */
-public class OperativeMemory extends Memory {
+public class VideoMemory extends Memory {
 
 
-    public OperativeMemory(String company, int size) {
+    public VideoMemory(String company, int size) {
         super(company, size);
     }
 
-    public OperativeMemory(int id, String company, int size) {
+    public VideoMemory(int id, String company, int size) {
         super(id, company, size);
     }
 
     @Override
     public String toString() {
-        return "OperativeMemory{" +
+        return "VideoMemory{" +
                 "id=" + id +
                 ", company='" + company + '\'' +
                 ", size=" + size +

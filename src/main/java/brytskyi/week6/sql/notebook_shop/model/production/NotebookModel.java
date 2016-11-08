@@ -1,4 +1,4 @@
-package brytskyi.week6.sql.notebook_shop.model;
+package brytskyi.week6.sql.notebook_shop.model.production;
 
 /**
  * Created by alexandr on 05.11.16.
@@ -42,6 +42,24 @@ public class NotebookModel {
 
     public void setModel(String model) {
         this.model = model;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        NotebookModel that = (NotebookModel) o;
+
+        if (id != that.id) return false;
+        if (company != null ? !company.equals(that.company) : that.company != null) return false;
+        return model != null ? model.equals(that.model) : that.model == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        return id;
     }
 
     @Override

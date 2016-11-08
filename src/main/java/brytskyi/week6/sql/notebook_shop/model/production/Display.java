@@ -1,4 +1,4 @@
-package brytskyi.week6.sql.notebook_shop.model;
+package brytskyi.week6.sql.notebook_shop.model.production;
 
 /**
  * Created by alexandr on 05.11.16.
@@ -41,6 +41,24 @@ public class Display {
 
     public void setHeight(int height) {
         this.height = height;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Display display = (Display) o;
+
+        if (id != display.id) return false;
+        if (width != display.width) return false;
+        return height == display.height;
+
+    }
+
+    @Override
+    public int hashCode() {
+        return id;
     }
 
     @Override

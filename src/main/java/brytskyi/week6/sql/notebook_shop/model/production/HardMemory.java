@@ -1,4 +1,4 @@
-package brytskyi.week6.sql.notebook_shop.model;
+package brytskyi.week6.sql.notebook_shop.model.production;
 
 /**
  * Created by alexandr on 05.11.16.
@@ -13,6 +13,7 @@ public class HardMemory extends Memory {
     public HardMemory(int id, String company, int size) {
         super(id, company, size);
     }
+
 
     @Override
     public String toString() {
