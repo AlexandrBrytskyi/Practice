@@ -1,4 +1,4 @@
-package brytskyi.week6.sql.notebook_shop.controller;
+package brytskyi.week6.sql.notebook_shop.services;
 
 
 import brytskyi.week6.sql.notebook_shop.model.exceptions.controller_exceptions.NotRegisteredBuyerException;
@@ -9,9 +9,9 @@ import brytskyi.week6.sql.notebook_shop.model.users.Contacts;
 
 public interface Loginable {
 
-    String register(String name, String pass) throws WrongLoginDataException;
+    String login(String name, String pass) throws WrongLoginDataException;
 
-    String register(String phone) throws NotRegisteredBuyerException;
+    String login(String phone) throws NotRegisteredBuyerException;
 
     Buyer register(Contacts contacts) throws NullFieldException;
 

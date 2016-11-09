@@ -1,9 +1,7 @@
 package brytskyi.week6.sql.notebook_shop.dao;
 
-import brytskyi.week6.sql.notebook_shop.model.exceptions.dao_exceptions.NullFieldException;
 import brytskyi.week6.sql.notebook_shop.model.selling.Prodaja;
-import brytskyi.week6.sql.notebook_shop.model.users.Buyer;
-import brytskyi.week6.sql.notebook_shop.model.users.Seller;
+
 
 import java.util.Date;
 import java.util.List;
@@ -11,7 +9,7 @@ import java.util.List;
 
 public interface ISellingDAO extends MyCloseable {
 
-    Prodaja addProdaja(Prodaja prodaja) throws NullFieldException;
+    Prodaja addProdaja(int notebookID, int buyerID, int sellerID);
 
     List<Prodaja> getProdajasBuyer(int buyer, Date begin, Date end);
 

@@ -38,12 +38,8 @@ public class TestProductionDao {
 
     @BeforeClass
     public static void initDao() {
-        try {
             dao = new MySQL_DAO();
             dao.openConnection();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
     }
 
     @AfterClass
@@ -427,7 +423,7 @@ public class TestProductionDao {
 
     @Test
     public void _29addSellerTest() {
-        seller = new Seller(new Contacts("Huy", "Sabaka", "+380973991848"), 5000,"");
+        seller = new Seller(new Contacts("Huy", "Sabaka", "+380973991848"), 5000, "");
         try {
             seller = dao.addSeller(seller);
             Assert.assertNotNull(seller);
@@ -440,7 +436,7 @@ public class TestProductionDao {
 
     @Test
     public void _28getSellersTest() {
-        seller = new Seller(new Contacts("Vasia", "Petia", "+380973991848"), 8000,"");
+        seller = new Seller(new Contacts("Vasia", "Petia", "+380973991848"), 8000, "");
         try {
             seller = dao.addSeller(seller);
             List<Seller> sellers = dao.getSellers(true);
@@ -454,7 +450,7 @@ public class TestProductionDao {
 
     @Test
     public void _29updateSellerTest() {
-        seller = new Seller(new Contacts("Vasia", "Petia", "+380973991848"), 8000,"");
+        seller = new Seller(new Contacts("Vasia", "Petia", "+380973991848"), 8000, "");
         try {
             seller = dao.addSeller(seller);
             seller.setWorking(false);
@@ -471,14 +467,14 @@ public class TestProductionDao {
 
         Date start = Date.from(LocalDate.now().minusDays(1).atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
         Date end = Date.from(LocalDate.now().plusDays(1).atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
-        try {
-            Prodaja prodaja = dao.addProdaja(new Prodaja(buyer, seller, notebookForSail));
-            List prodajas1 = dao.getProdajasBuyer(buyer.getId(), start, end);
-            List prodajas2 = dao.getProdajasSeller(seller.getId(), start, end);
-            Assert.assertEquals(prodajas1.get(0), prodajas2.get(0));
-        } catch (NullFieldException e) {
-            e.printStackTrace();
-        }
+
+        System.out.println("buyer" + buyer.getId());
+        System.out.println("seller" + seller.getId());
+        Prodaja prodaja = dao.addProdaja( notebookForSail.getId(),buyer.getId(), seller.getId());
+        List prodajas1 = dao.getProdajasBuyer(buyer.getId(), start, end);
+        List prodajas2 = dao.getProdajasSeller(seller.getId(), start, end);
+        Assert.assertEquals(prodajas1.get(0), prodajas2.get(0));
+
     }
 
 

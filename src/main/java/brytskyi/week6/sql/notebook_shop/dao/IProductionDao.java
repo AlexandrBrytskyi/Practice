@@ -80,4 +80,7 @@ public interface IProductionDao extends MyCloseable {
 
     List<NotebookForSail> getNotebooks(NotebookState state, Date periodStateChangedStart, Date periodStateChangedEnd);
 
+
+    List<NotebookForSail> getNotebooksByKriteria(int hardMemory, int operativeMemory, int processor,
+                                                 int videoMemory, int model, int display, double pricemin, double priceMax);
 }

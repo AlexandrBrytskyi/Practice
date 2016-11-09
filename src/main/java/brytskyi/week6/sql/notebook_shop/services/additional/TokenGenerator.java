@@ -1,4 +1,4 @@
-package brytskyi.week6.sql.notebook_shop.controller.additional;
+package brytskyi.week6.sql.notebook_shop.services.additional;
 
 import java.math.BigInteger;
 import java.security.SecureRandom;

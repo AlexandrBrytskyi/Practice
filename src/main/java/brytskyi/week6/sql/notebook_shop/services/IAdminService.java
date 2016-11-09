@@ -1,4 +1,4 @@
-package brytskyi.week6.sql.notebook_shop.controller;
+package brytskyi.week6.sql.notebook_shop.services;
 
 import brytskyi.week6.sql.notebook_shop.model.exceptions.dao_exceptions.NullFieldException;
 import brytskyi.week6.sql.notebook_shop.model.production.*;
@@ -12,13 +12,11 @@ import java.util.List;
 /**
  * Created by alexandr on 08.11.16.
  */
-public interface IAdminService {
+public interface IAdminService extends IGetProductionService {
 
     NotebookModel addNotebookModel(NotebookModel model);
 
     NotebookModel getNoteBookModelById(int id);
-
-    List<NotebookModel> getAllNotebookModels();
 
     NotebookModel removeNotebookModel(int id);
 
@@ -26,13 +24,9 @@ public interface IAdminService {
 
     Processor getProcessorById(int id);
 
-    List<Processor> getAllProcessors();
-
     Processor removeProcessor(int id);
 
     HardMemory addHardMemory(HardMemory hardMemory);
-
-    List<HardMemory> getAllHardMemory();
 
     HardMemory getHardMemoryById(int id);
 
@@ -42,13 +36,9 @@ public interface IAdminService {
 
     OperativeMemory removeOperativeMemory(int id);
 
-    List<OperativeMemory> getAllOperativeMemory();
-
     OperativeMemory getOperativeMemoryById(int id);
 
     VideoMemory addVideoMemory(VideoMemory videoMemory);
-
-    List<VideoMemory> getAllVideoMemory();
 
     VideoMemory removeVideoMemory(int id);
 
@@ -56,13 +46,9 @@ public interface IAdminService {
 
     Display addDisplay(Display display);
 
-    List<Display> getAllDisplays();
-
     Display removeDisplay(int id);
 
     Display getDisplayById(int id);
-
-    List<NotebookType> getAllNotebookTypes();
 
     Partiya priniatPartiyu(List<NotebookForSail> notebooks, int notebookTypeId) throws NullFieldException;
 
@@ -71,10 +57,6 @@ public interface IAdminService {
     NotebookType getNotebookTypeById(int id);
 
     NotebookType removeNotebookType(int id);
-
-    List<NotebookType> getAllNoteBookTypes();
-
-    NotebookForSail sellNoteBook(int notebookId) throws NullFieldException;
 
     NotebookForSail spisatNotebook(int id) throws NullFieldException;
 

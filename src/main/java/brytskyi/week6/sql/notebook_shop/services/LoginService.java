@@ -1,6 +1,8 @@
-package brytskyi.week6.sql.notebook_shop.controller;
+package brytskyi.week6.sql.notebook_shop.services;
 
-import brytskyi.week6.sql.notebook_shop.controller.additional.TokenGenerator;
+import brytskyi.week6.sql.notebook_shop.services.additional.Context;
+import brytskyi.week6.sql.notebook_shop.services.additional.TokenGenerator;
+import brytskyi.week6.sql.notebook_shop.services.additional.UserType;
 import brytskyi.week6.sql.notebook_shop.dao.IUsersDao;
 import brytskyi.week6.sql.notebook_shop.model.exceptions.controller_exceptions.NotRegisteredBuyerException;
 import brytskyi.week6.sql.notebook_shop.model.exceptions.controller_exceptions.WrongLoginDataException;
@@ -9,27 +11,37 @@ import brytskyi.week6.sql.notebook_shop.model.users.Buyer;
 import brytskyi.week6.sql.notebook_shop.model.users.Contacts;
 import brytskyi.week6.sql.notebook_shop.model.users.Seller;
 
-/**
- * Created by alexandr on 08.11.16.
- */
+
 public class LoginService implements Loginable {
 
     private IUsersDao usersDao;
+    private Context ctxt;
 
-    @Override
-    public String register(String name, String pass) throws WrongLoginDataException {
-        usersDao.openConnection();
-        try {
-            Seller s = usersDao.getSeller(name, pass);
-            if (null == s) throw new WrongLoginDataException();
-        } finally {
-            usersDao.closeConnection();
-        }
-        return TokenGenerator.getToken();
+    public LoginService(IUsersDao usersDao, Context ctxt) {
+        this.usersDao = usersDao;
+        this.ctxt = ctxt;
     }
 
     @Override
-    public String register(String phone) throws NotRegisteredBuyerException {
+    public String login(String name, String pass) throws WrongLoginDataException {
+        try {
+            return ctxt.adminLogin(name, pass);
+        } catch (WrongLoginDataException e) {
+            usersDao.openConnection();
+            try {
+                Seller s = usersDao.getSeller(name, pass);
+                if (null == s) throw new WrongLoginDataException();
+            } finally {
+                usersDao.closeConnection();
+            }
+            String token = TokenGenerator.getToken();
+            ctxt.getTokens().put(token, UserType.SELLER);
+            return token;
+        }
+    }
+
+    @Override
+    public String login(String phone) throws NotRegisteredBuyerException {
         usersDao.openConnection();
         try {
             Buyer buyer = usersDao.getBuyer(phone);
@@ -37,7 +49,9 @@ public class LoginService implements Loginable {
         } finally {
             usersDao.closeConnection();
         }
-        return TokenGenerator.getToken();
+        String token = TokenGenerator.getToken();
+        ctxt.getTokens().put(token, UserType.BUYER);
+        return token;
     }
 
     public Buyer register(Contacts contacts) throws NullFieldException {
