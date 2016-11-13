@@ -1,20 +1,49 @@
 package brytskyi.week6.sql.notebook_shop.model.production;
 
-/**
- * Created by alexandr on 05.11.16.
- */
+import org.hibernate.annotations.ManyToAny;
+
+import javax.persistence.*;
+
+@Entity
+@Table(name = "notebook_types")
 public class NotebookType {
 
+    @Id
+    @GeneratedValue
     private int id;
+
+    @Column(name = "descr")
     private String desc;
+
+    @ManyToOne(targetEntity = HardMemory.class, cascade = {CascadeType.MERGE})
+    @JoinColumn(name = "hard_memory", referencedColumnName = "id")
     private Memory hardMemory;
+
+    @ManyToOne(targetEntity = OperativeMemory.class, cascade = {CascadeType.MERGE})
+    @JoinColumn(name = "operative_memory", referencedColumnName = "id")
     private Memory operativeMemory;
+
+    @ManyToOne(targetEntity = Processor.class, cascade = {CascadeType.MERGE})
+    @JoinColumn(name = "processor", referencedColumnName = "id")
     private Processor processor;
+
+    @ManyToOne(targetEntity = VideoMemory.class,cascade = {CascadeType.MERGE})
+    @JoinColumn(name = "video_memory", referencedColumnName = "id")
     private Memory videoMemory;
+
+    @ManyToOne(targetEntity = NotebookModel.class, cascade = {CascadeType.MERGE})
+    @JoinColumn(name = "model", referencedColumnName = "id")
     private NotebookModel model;
+
+    @ManyToOne(targetEntity = Display.class, cascade = {CascadeType.MERGE})
+    @JoinColumn(name = "display", referencedColumnName = "id")
     private Display display;
+
     private double price;
 
+
+    public NotebookType() {
+    }
 
     public NotebookType(int id, String desc, Memory hardMemory, Memory operativeMemory, Processor processor, Memory videoMemory, NotebookModel model, double price, Display display) {
         this.id = id;

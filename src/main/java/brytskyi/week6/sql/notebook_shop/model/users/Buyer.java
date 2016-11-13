@@ -1,27 +1,41 @@
 package brytskyi.week6.sql.notebook_shop.model.users;
 
 import brytskyi.week6.sql.notebook_shop.model.production.NotebookForSail;
+import brytskyi.week6.sql.notebook_shop.model.selling.Prodaja;
 
+import javax.persistence.*;
 import java.util.LinkedList;
 import java.util.List;
 
-
+@Entity
+@Table(name = "buyers")
 public class Buyer {
 
+    @Id
+    @GeneratedValue
     private int id;
+
+    @OneToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "contacts", referencedColumnName = "id")
     private Contacts contacts;
-    private List<NotebookForSail> buyedProduction;
+
+
+    @OneToMany(mappedBy = "buyer", fetch = FetchType.EAGER)
+    private List<Prodaja> buyed;
     private double moneySpent;
+
+    public Buyer() {
+    }
 
     public Buyer(Contacts contacts) {
         this.contacts = contacts;
-        this.buyedProduction = new LinkedList<>();
+        this.buyed = new LinkedList<>();
     }
 
-    public Buyer(int id, Contacts contacts, List<NotebookForSail> buyedProduction, double moneySpent) {
+    public Buyer(int id, Contacts contacts, List<Prodaja> buyedProduction, double moneySpent) {
         this.id = id;
         this.contacts = contacts;
-        this.buyedProduction = buyedProduction;
+        this.buyed = buyedProduction;
         this.moneySpent = moneySpent;
     }
 
@@ -41,17 +55,17 @@ public class Buyer {
         this.contacts = contacts;
     }
 
-    public List<NotebookForSail> getBuyedProduction() {
-        return buyedProduction;
+    public List<Prodaja> getBuyed() {
+        return buyed;
     }
 
-    public void setBuyedProduction(List<NotebookForSail> buyedProduction) {
-        this.buyedProduction = buyedProduction;
+    public void setBuyed(List<Prodaja> buyed) {
+        this.buyed = buyed;
     }
 
-    public void buyNotebook(NotebookForSail notebookForSail) {
-        buyedProduction.add(notebookForSail);
-        moneySpent += notebookForSail.getType().getPrice();
+    public void buyNotebook(Prodaja prodaja) {
+        buyed.add(prodaja);
+        moneySpent += prodaja.getNotebookForSail().getType().getPrice();
     }
 
     public double getMoneySpent() {
@@ -69,10 +83,7 @@ public class Buyer {
 
         Buyer buyer = (Buyer) o;
 
-        if (id != buyer.id) return false;
-        if (Double.compare(buyer.moneySpent, moneySpent) != 0) return false;
-        if (contacts != null ? !contacts.equals(buyer.contacts) : buyer.contacts != null) return false;
-        return buyedProduction != null ? buyedProduction.equals(buyer.buyedProduction) : buyer.buyedProduction == null;
+        return id == buyer.id;
 
     }
 
@@ -86,7 +97,7 @@ public class Buyer {
         return "Buyer{" +
                 "id=" + id +
                 ", contacts=" + contacts +
-                ", buyedProduction=" + buyedProduction +
+                ", buyed=" + buyed +
                 ", moneySpent=" + moneySpent +
                 '}';
     }

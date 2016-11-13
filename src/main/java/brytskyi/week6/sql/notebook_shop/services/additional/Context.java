@@ -3,7 +3,10 @@ package brytskyi.week6.sql.notebook_shop.services.additional;
 import brytskyi.week6.sql.notebook_shop.dao.IProductionDao;
 import brytskyi.week6.sql.notebook_shop.dao.ISellingDAO;
 import brytskyi.week6.sql.notebook_shop.dao.IUsersDao;
-import brytskyi.week6.sql.notebook_shop.dao.sql_dao.MySQL_DAO;
+import brytskyi.week6.sql.notebook_shop.dao.sql_dao.hibernateMySqlDao.HibernateMySqlDao;
+import brytskyi.week6.sql.notebook_shop.dao.sql_dao.simpleMySqlDao.IMySqlDaoWithConnection;
+import brytskyi.week6.sql.notebook_shop.dao.sql_dao.simpleMySqlDao.MySQL_DAO;
+import brytskyi.week6.sql.notebook_shop.dao.sql_dao.simpleMySqlDao.MySqlDAOWithConnection;
 import brytskyi.week6.sql.notebook_shop.model.exceptions.controller_exceptions.WrongLoginDataException;
 import brytskyi.week6.sql.notebook_shop.services.*;
 
@@ -29,10 +32,13 @@ public class Context {
     private IBuyerService buyerService;
     private IAdminService adminService;
     private ICommonServiceWithToken commonServiceWithToken;
+    private IMySqlDaoWithConnection mySqlDaoWithConnection;
 
     private Context() {
         initTokensMap();
-        MySQL_DAO dao = new MySQL_DAO();
+       /* mySqlDaoWithConnection = new MySqlDAOWithConnection();
+        MySQL_DAO dao = new MySQL_DAO(mySqlDaoWithConnection);*/
+        HibernateMySqlDao dao = new HibernateMySqlDao();
         productionDao = dao;
         sellingDAO = dao;
         usersDao = dao;

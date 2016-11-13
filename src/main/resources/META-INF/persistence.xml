@@ -1,0 +1,57 @@
+<persistence xmlns="http://java.sun.com/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://java.sun.com/xml/ns/persistence
+             http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
+             version="2.0">
+
+
+    <persistence-unit name="shop_unit" transaction-type="RESOURCE_LOCAL">
+        <description>
+            Persistence unit for the JPA tutorial of the Hibernate Getting Started Guide
+        </description>
+
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+
+        <class>brytskyi.week6.sql.notebook_shop.model.production.Display</class>
+        <class>brytskyi.week6.sql.notebook_shop.model.production.HardMemory</class>
+        <class>brytskyi.week6.sql.notebook_shop.model.production.OperativeMemory</class>
+        <class>brytskyi.week6.sql.notebook_shop.model.production.VideoMemory</class>
+        <class>brytskyi.week6.sql.notebook_shop.model.production.Processor</class>
+        <class>brytskyi.week6.sql.notebook_shop.model.production.NotebookType</class>
+        <class>brytskyi.week6.sql.notebook_shop.model.production.NotebookForSail</class>
+        <class>brytskyi.week6.sql.notebook_shop.model.production.Partiya</class>
+        <class>brytskyi.week6.sql.notebook_shop.model.selling.Prodaja</class>
+        <class>brytskyi.week6.sql.notebook_shop.model.users.Seller</class>
+        <class>brytskyi.week6.sql.notebook_shop.model.users.Buyer</class>
+        <class>brytskyi.week6.sql.notebook_shop.model.users.Contacts</class>
+
+
+        <properties>
+            <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
+            <!--data base must be created before init persistence.xml -->
+            <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/notebookDB"/>
+            <property name="javax.persistence.jdbc.user" value="root"/>
+            <property name="javax.persistence.jdbc.password" value=""/>
+
+            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5Dialect"/>
+            <property name="hibernate.show_sql" value="true"/>
+
+            <property name="hibernate.hbm2ddl.auto" value="update"/> <!-- init DDL operations -->
+            <!--update,create, create-drop-->
+
+            <property name="hibernate.connection.provider_class"
+                      value="org.hibernate.service.jdbc.connections.internal.C3P0ConnectionProvider" />
+
+            <property name="hibernate.c3p0.max_size" value="100" />
+            <property name="hibernate.c3p0.min_size" value="0" />
+            <property name="hibernate.c3p0.acquire_increment" value="1" />
+            <property name="hibernate.c3p0.idle_test_period" value="300" />
+            <property name="hibernate.c3p0.max_statements" value="0" />
+            <property name="hibernate.c3p0.timeout" value="100" />
+
+        </properties>
+
+    </persistence-unit>
+
+
+</persistence>

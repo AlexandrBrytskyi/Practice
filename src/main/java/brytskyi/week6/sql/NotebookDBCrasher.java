@@ -7,12 +7,12 @@ import brytskyi.week6.sql.notebook_shop.model.exceptions.UserAccessException;
 import brytskyi.week6.sql.notebook_shop.model.exceptions.controller_exceptions.WrongLoginDataException;
 import brytskyi.week6.sql.notebook_shop.model.exceptions.dao_exceptions.NullFieldException;
 import brytskyi.week6.sql.notebook_shop.model.production.*;
+import brytskyi.week6.sql.notebook_shop.model.selling.Prodaja;
 import brytskyi.week6.sql.notebook_shop.model.users.Buyer;
 import brytskyi.week6.sql.notebook_shop.model.users.Contacts;
 import brytskyi.week6.sql.notebook_shop.services.ICommonServiceWithToken;
 import brytskyi.week6.sql.notebook_shop.services.additional.TokenGenerator;
 import org.apache.log4j.Logger;
-import org.apache.log4j.PropertyConfigurator;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -29,12 +29,12 @@ public class NotebookDBCrasher {
 
     public NotebookDBCrasher(ICommonServiceWithToken serviceWithToken) throws WrongLoginDataException {
         this.serviceWithToken = serviceWithToken;
-        service = Executors.newFixedThreadPool(40);
+        service = Executors.newFixedThreadPool(50);
         token = serviceWithToken.login("admin", "admin");
     }
 
     public void startThreads() {
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < 40; i++) {
             service.submit(new Runnable() {
                 @Override
                 public void run() {
@@ -56,7 +56,7 @@ public class NotebookDBCrasher {
                                 }
                             }}, nt.getId(), token);
                             queue.offer(new Integer[]{hardId, operId, procId, videoId, modelId, diplId});
-                            LOGGER.info(Thread.currentThread().getId() + " Thread has assed, time is " + (System.currentTimeMillis() - start));
+                            LOGGER.info(Thread.currentThread().getId() + " Thread has added, time is " + (System.currentTimeMillis() - start));
                         } catch (NullFieldException e) {
                             LOGGER.error(e);
                         } catch (NullTokenException e) {
@@ -74,7 +74,7 @@ public class NotebookDBCrasher {
         }
 
 
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < 10; i++) {
             service.submit(new Runnable() {
                 @Override
                 public void run() {

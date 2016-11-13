@@ -1,18 +1,35 @@
 package brytskyi.week6.sql.notebook_shop.model.production;
 
+import javax.persistence.*;
 import java.util.Date;
 
-/**
- * Created by alexandr on 05.11.16.
- */
+@Entity
+@Table(name = "notebooks_for_sail")
 public class NotebookForSail {
 
+    @Id
+    @GeneratedValue
     private int id;
+
+    @ManyToOne(cascade = {CascadeType.MERGE})
+    @JoinColumn(name = "notebook_type")
     private NotebookType type;
+
     private String serial;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "partiya", referencedColumnName = "id")
     private Partiya partiya;
+
+    @Enumerated(value = EnumType.STRING)
     private NotebookState state;
+
+    @Temporal(value = TemporalType.TIMESTAMP)
     private Date dateStateChanged;
+
+
+    public NotebookForSail() {
+    }
 
     public NotebookForSail(NotebookType type, String serial, Partiya partiya, NotebookState state) {
         this.type = type;
@@ -86,24 +103,13 @@ public class NotebookForSail {
 
         NotebookForSail that = (NotebookForSail) o;
 
-        if (id != that.id) return false;
-        if (type != null ? !type.equals(that.type) : that.type != null) return false;
-        if (serial != null ? !serial.equals(that.serial) : that.serial != null) return false;
-        if (partiya != null ? !partiya.equals(that.partiya) : that.partiya != null) return false;
-        if (state != that.state) return false;
-        return dateStateChanged != null ? dateStateChanged.equals(that.dateStateChanged) : that.dateStateChanged == null;
+        return id == that.id;
 
     }
 
     @Override
     public int hashCode() {
-        int result = id;
-        result = 31 * result + (type != null ? type.hashCode() : 0);
-        result = 31 * result + (serial != null ? serial.hashCode() : 0);
-        result = 31 * result + (partiya != null ? partiya.hashCode() : 0);
-        result = 31 * result + (state != null ? state.hashCode() : 0);
-        result = 31 * result + (dateStateChanged != null ? dateStateChanged.hashCode() : 0);
-        return result;
+        return id;
     }
 
     @Override

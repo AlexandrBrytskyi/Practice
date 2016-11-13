@@ -4,18 +4,35 @@ import brytskyi.week6.sql.notebook_shop.model.production.NotebookForSail;
 import brytskyi.week6.sql.notebook_shop.model.users.Buyer;
 import brytskyi.week6.sql.notebook_shop.model.users.Seller;
 
+import javax.persistence.*;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.Reader;
 
-
+@Entity
+@Table(name = "prodajas")
 public class Prodaja {
 
+    @Id
+    @GeneratedValue
     private int id;
+
+    @ManyToOne(targetEntity = Buyer.class, fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinColumn(name = "buyer", referencedColumnName = "id")
     private Buyer buyer;
+
+    @ManyToOne(targetEntity = Seller.class, fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinColumn(name = "seller", referencedColumnName = "id")
     private Seller seller;
+
+    @OneToOne(targetEntity = NotebookForSail.class, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinColumn(name = "notebook", referencedColumnName = "id")
     private NotebookForSail notebookForSail;
+
+
+    public Prodaja() {
+    }
 
     public Prodaja(Buyer buyer, Seller seller, NotebookForSail notebookForSail) {
         this.buyer = buyer;
@@ -84,8 +101,8 @@ public class Prodaja {
     public String toString() {
         return "Prodaja{" +
                 "id=" + id +
-                ", buyer=" + buyer +
-                ", seller=" + seller +
+                ", buyer=" + buyer.getId() +
+                ", seller=" + seller.getId() +
                 ", notebookForSail=" + notebookForSail +
                 '}';
     }

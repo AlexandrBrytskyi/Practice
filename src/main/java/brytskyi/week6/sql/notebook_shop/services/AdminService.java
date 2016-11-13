@@ -30,323 +30,175 @@ public class AdminService extends GetProductionService implements IAdminService 
 
     @Override
     public NotebookModel addNotebookModel(NotebookModel model) {
-        productionDao.openConnection();
-        try {
-            return productionDao.addNotebookModel(model);
-        } finally {
-            productionDao.closeConnection();
-        }
+        return productionDao.addNotebookModel(model);
     }
 
     @Override
     public NotebookModel getNoteBookModelById(int id) {
-        productionDao.openConnection();
-        try {
-            return productionDao.getNoteBookModelById(id);
-        } finally {
-            productionDao.closeConnection();
-        }
+        return productionDao.getNoteBookModelById(id);
     }
 
 
     @Override
     public NotebookModel removeNotebookModel(int id) {
-        productionDao.openConnection();
-        try {
-            return productionDao.removeNotebookModel(id);
-        } finally {
-            productionDao.closeConnection();
-        }
+        return productionDao.removeNotebookModel(id);
     }
 
     @Override
     public Processor addProcessor(Processor processor) {
-        productionDao.openConnection();
-        try {
-            return productionDao.addProcessor(processor);
-        } finally {
-            productionDao.closeConnection();
-        }
+        return productionDao.addProcessor(processor);
     }
 
     @Override
     public Processor getProcessorById(int id) {
-        productionDao.openConnection();
-        try {
-            return productionDao.getProcessorById(id);
-        } finally {
-            productionDao.closeConnection();
-        }
+        return productionDao.getProcessorById(id);
     }
 
 
     @Override
     public Processor removeProcessor(int id) {
-        productionDao.openConnection();
-        try {
-            return productionDao.removeProcessor(id);
-        } finally {
-            productionDao.closeConnection();
-        }
+        return productionDao.removeProcessor(id);
     }
 
     @Override
     public HardMemory addHardMemory(HardMemory hardMemory) {
-        productionDao.openConnection();
-        try {
-            return productionDao.addHardMemory(hardMemory);
-        } finally {
-            productionDao.closeConnection();
-        }
+        return productionDao.addHardMemory(hardMemory);
     }
 
 
     @Override
     public HardMemory getHardMemoryById(int id) {
-        productionDao.openConnection();
-        try {
-            return productionDao.getHardMemoryById(id);
-        } finally {
-            productionDao.closeConnection();
-        }
+        return productionDao.getHardMemoryById(id);
     }
 
     @Override
     public HardMemory removeHardMemory(int id) {
-        productionDao.openConnection();
-        try {
-            return productionDao.removeHardMemory(id);
-        } finally {
-            productionDao.closeConnection();
-        }
+        return productionDao.removeHardMemory(id);
     }
 
     @Override
     public OperativeMemory addOperativeMemory(OperativeMemory operativeMemory) {
-        productionDao.openConnection();
-        try {
-            return productionDao.addOperativeMemory(operativeMemory);
-        } finally {
-            productionDao.closeConnection();
-        }
+        return productionDao.addOperativeMemory(operativeMemory);
     }
 
     @Override
     public OperativeMemory removeOperativeMemory(int id) {
-        productionDao.openConnection();
-        try {
-            return productionDao.removeOperativeMemory(id);
-        } finally {
-            productionDao.closeConnection();
-        }
+        return productionDao.removeOperativeMemory(id);
     }
 
 
     @Override
     public OperativeMemory getOperativeMemoryById(int id) {
-        productionDao.openConnection();
-        try {
-            return productionDao.getOperativeMemoryById(id);
-        } finally {
-            productionDao.closeConnection();
-        }
+        return productionDao.getOperativeMemoryById(id);
     }
 
     @Override
     public VideoMemory addVideoMemory(VideoMemory videoMemory) {
-        productionDao.openConnection();
-        try {
-            return productionDao.addVideoMemory(videoMemory);
-        } finally {
-            productionDao.closeConnection();
-        }
+        return productionDao.addVideoMemory(videoMemory);
     }
 
 
     @Override
     public VideoMemory removeVideoMemory(int id) {
-        productionDao.openConnection();
-        try {
-            return productionDao.removeVideoMemory(id);
-        } finally {
-            productionDao.closeConnection();
-        }
+        return productionDao.removeVideoMemory(id);
     }
 
     @Override
     public VideoMemory getVideoMemoryById(int id) {
-        productionDao.openConnection();
-        try {
-            return productionDao.getVideoMemoryById(id);
-        } finally {
-            productionDao.closeConnection();
-        }
+        return productionDao.getVideoMemoryById(id);
     }
 
     @Override
     public Display addDisplay(Display display) {
-        productionDao.openConnection();
-        try {
-            return productionDao.addDisplay(display);
-        } finally {
-            productionDao.closeConnection();
-        }
+        return productionDao.addDisplay(display);
     }
 
     @Override
     public Display removeDisplay(int id) {
-        productionDao.openConnection();
-        try {
-            return productionDao.removeDisplay(id);
-        } finally {
-            productionDao.closeConnection();
-        }
+        return productionDao.removeDisplay(id);
     }
 
     @Override
     public Display getDisplayById(int id) {
-        productionDao.openConnection();
-        try {
-            return productionDao.getDisplayById(id);
-        } finally {
-            productionDao.closeConnection();
-        }
+        return productionDao.getDisplayById(id);
     }
 
 
     @Override
     public Partiya priniatPartiyu(List<NotebookForSail> notebooks, int notebookTypeId) throws NullFieldException {
-        productionDao.openConnection();
-        try {
-            Partiya partiya = new Partiya(productionDao.getNotebookTypeById(notebookTypeId),
-                    notebooks);
-            for (NotebookForSail notebook : notebooks) {
-                notebook.setPartiya(partiya);
-            }
-            return productionDao.addPartiya(partiya);
-        } finally {
-            productionDao.closeConnection();
+        Partiya partiya = new Partiya(productionDao.getNotebookTypeById(notebookTypeId),
+                notebooks);
+        for (NotebookForSail notebook : notebooks) {
+            notebook.setPartiya(partiya);
         }
+        return productionDao.addPartiya(partiya);
     }
 
 
     // TODO: 08.11.16 maybe cache?????????
     @Override
     public NotebookType createNoteBookType(String desc, double price, int modelId, int processoId, int hardMemId, int operMemId, int videoMemId, int displayId) throws NullFieldException {
-        productionDao.openConnection();
-        try {
-            return productionDao.addNotebookType(new NotebookType(
-                    desc, productionDao.getHardMemoryById(hardMemId),
-                    productionDao.getOperativeMemoryById(operMemId),
-                    productionDao.getProcessorById(processoId),
-                    productionDao.getVideoMemoryById(videoMemId),
-                    productionDao.getNoteBookModelById(modelId),
-                    productionDao.getDisplayById(displayId),
-                    price
-            ));
-        } finally {
-            productionDao.closeConnection();
-        }
+
+        return productionDao.addNotebookType(new NotebookType(
+                desc, productionDao.getHardMemoryById(hardMemId),
+                productionDao.getOperativeMemoryById(operMemId),
+                productionDao.getProcessorById(processoId),
+                productionDao.getVideoMemoryById(videoMemId),
+                productionDao.getNoteBookModelById(modelId),
+                productionDao.getDisplayById(displayId),
+                price
+        ));
+
     }
 
     @Override
     public NotebookType getNotebookTypeById(int id) {
-        productionDao.openConnection();
-        try {
-            return productionDao.getNotebookTypeById(id);
-        } finally {
-            productionDao.closeConnection();
-        }
+        return productionDao.getNotebookTypeById(id);
     }
 
     @Override
     public NotebookType removeNotebookType(int id) {
-        productionDao.openConnection();
-        try {
-            return productionDao.removeNotebookType(id);
-        } finally {
-            productionDao.closeConnection();
-        }
+        return productionDao.removeNotebookType(id);
     }
 
 
     @Override
     public NotebookForSail spisatNotebook(int id) throws NullFieldException {
-        productionDao.openConnection();
-        try {
-            return productionDao.updateNotebook(id, NotebookState.SPISAN.toString());
-        } finally {
-            productionDao.closeConnection();
-        }
+        return productionDao.updateNotebook(id, NotebookState.SPISAN.toString());
     }
 
     @Override
     public List<NotebookForSail> getSelledNotebooks(Date start, Date end) {
-        productionDao.openConnection();
-        try {
-            return productionDao.getNotebooks(NotebookState.SELLED, start, end);
-        } finally {
-            productionDao.closeConnection();
-        }
+        return productionDao.getNotebooks(NotebookState.SELLED, start, end);
     }
 
     @Override
     public List<NotebookForSail> getSpisaniNotebooks(Date start, Date end) {
-        productionDao.openConnection();
-        try {
-            return productionDao.getNotebooks(NotebookState.SPISAN, start, end);
-        } finally {
-            productionDao.closeConnection();
-        }
+        return productionDao.getNotebooks(NotebookState.SPISAN, start, end);
     }
 
     @Override
     public Buyer addBuyer(Buyer buyer) throws NullFieldException {
-        usersDao.openConnection();
-        try {
-            return usersDao.addBuyer(buyer);
-        } finally {
-            usersDao.closeConnection();
-        }
+        return usersDao.addBuyer(buyer);
     }
 
     @Override
     public List<Buyer> getBuyers() {
-        usersDao.openConnection();
-        try {
-            return usersDao.getAllBuyers();
-        } finally {
-            usersDao.closeConnection();
-        }
+        return usersDao.getAllBuyers();
     }
 
     @Override
     public List<Seller> getSellers(boolean working) {
-        usersDao.openConnection();
-        try {
-            return usersDao.getSellers(working);
-        } finally {
-            usersDao.closeConnection();
-        }
+        return usersDao.getSellers(working);
     }
 
     @Override
     public List<Prodaja> getNoteBooksSelled(int buyer, Date begin, Date end) {
-        sellingDAO.openConnection();
-        try {
-            return sellingDAO.getProdajasBuyer(buyer, begin, end);
-        } finally {
-            sellingDAO.closeConnection();
-        }
+        return sellingDAO.getProdajasBuyer(buyer, begin, end);
     }
 
     @Override
     public List<Prodaja> getNoteBooksBuyed(int seller, Date begin, Date end) {
-        sellingDAO.openConnection();
-        try {
-            return sellingDAO.getProdajasSeller(seller, begin, end);
-        } finally {
-            sellingDAO.closeConnection();
-        }
+        return sellingDAO.getProdajasSeller(seller, begin, end);
     }
 }

@@ -27,13 +27,8 @@ public class LoginService implements Loginable {
         try {
             return ctxt.adminLogin(name, pass);
         } catch (WrongLoginDataException e) {
-            usersDao.openConnection();
-            try {
-                Seller s = usersDao.getSeller(name, pass);
-                if (null == s) throw new WrongLoginDataException();
-            } finally {
-                usersDao.closeConnection();
-            }
+            Seller s = usersDao.getSeller(name, pass);
+            if (null == s) throw new WrongLoginDataException();
             String token = TokenGenerator.getToken();
             ctxt.getTokens().put(token, UserType.SELLER);
             return token;
@@ -42,13 +37,8 @@ public class LoginService implements Loginable {
 
     @Override
     public String login(String phone) throws NotRegisteredBuyerException {
-        usersDao.openConnection();
-        try {
-            Buyer buyer = usersDao.getBuyer(phone);
-            if (null == buyer) throw new NotRegisteredBuyerException();
-        } finally {
-            usersDao.closeConnection();
-        }
+        Buyer buyer = usersDao.getBuyer(phone);
+        if (null == buyer) throw new NotRegisteredBuyerException();
         String token = TokenGenerator.getToken();
         ctxt.getTokens().put(token, UserType.BUYER);
         return token;
@@ -56,11 +46,6 @@ public class LoginService implements Loginable {
 
     public Buyer register(Contacts contacts) throws NullFieldException {
         Buyer buyer = new Buyer(contacts);
-        usersDao.openConnection();
-        try {
-            return usersDao.addBuyer(buyer);
-        } finally {
-            usersDao.closeConnection();
-        }
+        return usersDao.addBuyer(buyer);
     }
 }

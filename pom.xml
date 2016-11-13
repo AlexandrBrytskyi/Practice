@@ -30,6 +30,8 @@
         <sdk.version>0.3.1</sdk.version>
         <mysql-connector-java.version>6.0.5</mysql-connector-java.version>
         <spring-integration-rmi.version>4.3.4.RELEASE</spring-integration-rmi.version>
+        <log4j.version>1.2.17</log4j.version>
+        <hibernate.version>5.2.4.Final</hibernate.version>
     </properties>
 
     <dependencies>
@@ -60,11 +62,28 @@
             <version>${mysql-connector-java.version}</version>
         </dependency>
 
+
         <dependency>
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
-            <version>1.2.17</version>
+            <version>${log4j.version}</version>
         </dependency>
+
+
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>${hibernate.version}</version>
+        </dependency>
+
+
+       <!--to manage connections pool to db-->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-c3p0</artifactId>
+            <version>${hibernate.version}</version>
+        </dependency>
+
 
 
 

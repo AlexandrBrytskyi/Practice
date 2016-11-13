@@ -1,13 +1,22 @@
 package brytskyi.week6.sql.notebook_shop.model.production;
 
-/**
- * Created by alexandr on 05.11.16.
- */
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "processors")
 public class Processor {
 
+    @Id
+    @GeneratedValue
     private int id;
     private String company;
     private int frequency;
+
+    public Processor() {
+    }
 
     public Processor(String company, int frequency) {
         this.company = company;

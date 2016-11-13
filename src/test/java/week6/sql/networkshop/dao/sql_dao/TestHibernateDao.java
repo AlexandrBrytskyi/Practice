@@ -1,13 +1,18 @@
 package week6.sql.networkshop.dao.sql_dao;
 
-import brytskyi.week6.sql.notebook_shop.dao.sql_dao.MySQL_DAO;
+import brytskyi.week6.sql.notebook_shop.dao.sql_dao.hibernateMySqlDao.HibernateMySqlDao;
+import brytskyi.week6.sql.notebook_shop.dao.sql_dao.simpleMySqlDao.MySQL_DAO;
+import brytskyi.week6.sql.notebook_shop.dao.sql_dao.simpleMySqlDao.MySqlDAOWithConnection;
 import brytskyi.week6.sql.notebook_shop.model.exceptions.dao_exceptions.NullFieldException;
 import brytskyi.week6.sql.notebook_shop.model.production.*;
 import brytskyi.week6.sql.notebook_shop.model.selling.Prodaja;
 import brytskyi.week6.sql.notebook_shop.model.users.Buyer;
 import brytskyi.week6.sql.notebook_shop.model.users.Contacts;
 import brytskyi.week6.sql.notebook_shop.model.users.Seller;
-import org.junit.*;
+import org.junit.Assert;
+import org.junit.BeforeClass;
+import org.junit.FixMethodOrder;
+import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
 import java.time.LocalDate;
@@ -22,9 +27,9 @@ import java.util.NoSuchElementException;
  */
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class TestProductionDao {
+public class TestHibernateDao {
 
-    private static MySQL_DAO dao = null;
+    private static HibernateMySqlDao dao = null;
     private static Display display;
     private static HardMemory hardMemory;
     private static OperativeMemory operativeMemory;
@@ -38,13 +43,7 @@ public class TestProductionDao {
 
     @BeforeClass
     public static void initDao() {
-            dao = new MySQL_DAO();
-            dao.openConnection();
-    }
-
-    @AfterClass
-    public static void closeConnection() {
-        dao.closeConnection();
+            dao = new HibernateMySqlDao();
     }
 
 
@@ -221,13 +220,6 @@ public class TestProductionDao {
         }
 
           /*if have null field*/
-        try {
-            notebookType.setHardMemory(null);
-            NotebookType added = dao.addNotebookType(notebookType);
-        } catch (NullFieldException e) {
-            e.printStackTrace();
-            Assert.assertTrue(true);
-        }
     }
 
     @Test

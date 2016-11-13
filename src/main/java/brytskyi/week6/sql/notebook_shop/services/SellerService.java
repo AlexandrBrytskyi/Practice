@@ -25,34 +25,19 @@ public class SellerService extends GetProductionService implements ISellerServic
 
     @Override
     public Prodaja sellNotebook(int notebookID, int buyerID, int sellerID) {
-        sellingDAO.openConnection();
-        try {
-            return sellingDAO.addProdaja(notebookID, buyerID, sellerID);
-        } finally {
-            sellingDAO.closeConnection();
-        }
+        return sellingDAO.addProdaja(notebookID, buyerID, sellerID);
     }
 
     @Override
     public List<Prodaja> getMyProdaja(int sellerID) {
         Date start = Date.from(LocalDate.MIN.minusDays(1).atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
         Date end = Date.from(LocalDate.MAX.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
-        sellingDAO.openConnection();
-        try {
-            return sellingDAO.getProdajasSeller(sellerID, start, end);
-        } finally {
-            sellingDAO.closeConnection();
-        }
+        return sellingDAO.getProdajasSeller(sellerID, start, end);
     }
 
     @Override
     public List<NotebookForSail> getNotebooksByKriteria(int hardMemory, int operativeMemory, int processor, int videoMemory, int model, int display, double pricemin, double priceMax) {
-        productionDao.openConnection();
-        try {
-            return productionDao.getNotebooksByKriteria(hardMemory, operativeMemory, processor,
-                    videoMemory, model, display, pricemin, priceMax);
-        } finally {
-            productionDao.closeConnection();
-        }
+        return productionDao.getNotebooksByKriteria(hardMemory, operativeMemory, processor,
+                videoMemory, model, display, pricemin, priceMax);
     }
 }

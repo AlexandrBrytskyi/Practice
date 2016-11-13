@@ -1,13 +1,20 @@
 package brytskyi.week6.sql.notebook_shop.model.production;
 
-/**
- * Created by alexandr on 05.11.16.
- */
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.MappedSuperclass;
+
+@MappedSuperclass
 public abstract class Memory {
 
+    @Id
+    @GeneratedValue
     protected int id;
     protected String company;
     protected int size;
+
+    public Memory() {
+    }
 
     public Memory(String company, int size) {
         this.company = company;

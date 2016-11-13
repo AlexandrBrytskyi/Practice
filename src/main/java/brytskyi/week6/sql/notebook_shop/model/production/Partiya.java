@@ -1,19 +1,33 @@
 package brytskyi.week6.sql.notebook_shop.model.production;
 
+import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 
-/**
- * Created by alexandr on 05.11.16.
- */
+@Entity
+@Table(name = "partiyas")
 public class Partiya {
 
+    @Id
+    @GeneratedValue
     private int id;
+
+    @ManyToOne(targetEntity = NotebookType.class, cascade = CascadeType.DETACH)
+    @JoinColumn(name = "partiyaType", referencedColumnName = "id")
     private NotebookType patriyaType;
+
     private double price;
+
     private int amountOfNotebooks;
+
+    @Temporal(value = TemporalType.TIMESTAMP)
     private Date dateOfTake;
+
+    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "partiya")
     private List<NotebookForSail> notebooks;
+
+    public Partiya() {
+    }
 
     public Partiya(NotebookType patriyaType, List<NotebookForSail> notebooks) {
         this.patriyaType = patriyaType;

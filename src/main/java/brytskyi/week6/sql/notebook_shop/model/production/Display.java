@@ -1,12 +1,24 @@
 package brytskyi.week6.sql.notebook_shop.model.production;
 
-/**
- * Created by alexandr on 05.11.16.
- */
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+
+
+@Entity
+@Table(name = "displays")
 public class Display {
+
+    @Id
+    @GeneratedValue
     private int id;
     private int width;
     private int height;
+
+    public Display() {
+    }
 
     public Display(int width, int height) {
         this.width = width;

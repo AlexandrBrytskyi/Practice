@@ -1,10 +1,16 @@
 package brytskyi.week6.sql.notebook_shop.model.production;
 
-/**
- * Created by alexandr on 05.11.16.
- */
+
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "hard_memories")
 public class HardMemory extends Memory {
 
+
+    public HardMemory() {
+    }
 
     public HardMemory(String company, int size) {
         super(company, size);

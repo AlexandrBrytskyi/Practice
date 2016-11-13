@@ -7,7 +7,7 @@ import java.util.Date;
 import java.util.List;
 
 
-public interface ISellingDAO extends MyCloseable {
+public interface ISellingDAO {
 
     Prodaja addProdaja(int notebookID, int buyerID, int sellerID);
 

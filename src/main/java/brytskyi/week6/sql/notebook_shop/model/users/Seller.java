@@ -1,19 +1,33 @@
 package brytskyi.week6.sql.notebook_shop.model.users;
 
 import brytskyi.week6.sql.notebook_shop.model.production.NotebookForSail;
+import brytskyi.week6.sql.notebook_shop.model.selling.Prodaja;
 
+import javax.persistence.*;
 import java.util.LinkedList;
 import java.util.List;
 
-
+@Entity
+@Table(name = "sellers")
 public class Seller {
 
+    @Id
+    @GeneratedValue
     private int id;
+
+    @OneToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "contacts", referencedColumnName = "id")
     private Contacts contacts;
-    private List<NotebookForSail> selled;
+
+    @OneToMany(mappedBy = "seller", fetch = FetchType.EAGER)
+    private List<Prodaja> selled;
+
     private double salary;
     private boolean isWorking;
     private String pass;
+
+    public Seller() {
+    }
 
     public Seller(Contacts contacts, double salary, String pass) {
         isWorking = true;
@@ -23,7 +37,7 @@ public class Seller {
         this.pass = pass;
     }
 
-    public Seller(int id, Contacts contacts, List<NotebookForSail> selled, double salary, boolean isWorking, String pass) {
+    public Seller(int id, Contacts contacts, List<Prodaja> selled, double salary, boolean isWorking, String pass) {
         this.id = id;
         this.contacts = contacts;
         this.selled = selled;
@@ -49,11 +63,11 @@ public class Seller {
         this.contacts = contacts;
     }
 
-    public List<NotebookForSail> getSelled() {
+    public List<Prodaja> getSelled() {
         return selled;
     }
 
-    public void setSelled(List<NotebookForSail> selled) {
+    public void setSelled(List<Prodaja> selled) {
         this.selled = selled;
     }
 
@@ -88,11 +102,7 @@ public class Seller {
 
         Seller seller = (Seller) o;
 
-        if (id != seller.id) return false;
-        if (Double.compare(seller.salary, salary) != 0) return false;
-        if (isWorking != seller.isWorking) return false;
-        if (contacts != null ? !contacts.equals(seller.contacts) : seller.contacts != null) return false;
-        return selled != null ? selled.equals(seller.selled) : seller.selled == null;
+        return id == seller.id;
 
     }
 

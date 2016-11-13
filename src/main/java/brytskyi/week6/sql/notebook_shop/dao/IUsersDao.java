@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Created by alexandr on 08.11.16.
  */
-public interface IUsersDao extends MyCloseable {
+public interface IUsersDao {
 
     Buyer addBuyer(Buyer buyer) throws NullFieldException;
 

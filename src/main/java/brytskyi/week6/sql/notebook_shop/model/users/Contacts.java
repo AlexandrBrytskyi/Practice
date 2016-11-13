@@ -1,11 +1,23 @@
 package brytskyi.week6.sql.notebook_shop.model.users;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
+@Entity
+@Table(name = "contacts")
 public class Contacts {
+
+    @Id
+    @GeneratedValue
     private int id;
     private String name;
     private String surname;
     private String phone;
+
+    public Contacts() {
+    }
 
     public Contacts(String name, String surname, String phone) {
         this.name = name;

@@ -23,12 +23,7 @@ public class BuyerService extends GetProductionService implements IBuyerService 
     public List<Prodaja> getMyProdajas(int buyerID) {
         Date start = Date.from(LocalDate.MIN.minusDays(1).atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
         Date end = Date.from(LocalDate.MAX.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
-        dao.openConnection();
-        try {
-            return dao.getProdajasBuyer(buyerID, start, end);
-        } finally {
-            dao.closeConnection();
-        }
+        return dao.getProdajasBuyer(buyerID, start, end);
     }
 
 

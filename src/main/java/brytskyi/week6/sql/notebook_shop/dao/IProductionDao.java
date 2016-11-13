@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Created by alexandr on 05.11.16.
  */
-public interface IProductionDao extends MyCloseable {
+public interface IProductionDao {
 
 
     NotebookModel addNotebookModel(NotebookModel model);
