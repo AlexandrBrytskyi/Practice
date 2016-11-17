@@ -1,14 +1,12 @@
 package week6.sql.networkshop.dao.sql_dao;
 
-import brytskyi.week6.sql.notebook_shop.dao.sql_dao.hibernateMySqlDao.HibernateMySqlDao;
-import brytskyi.week6.sql.notebook_shop.dao.sql_dao.simpleMySqlDao.MySQL_DAO;
-import brytskyi.week6.sql.notebook_shop.dao.sql_dao.simpleMySqlDao.MySqlDAOWithConnection;
-import brytskyi.week6.sql.notebook_shop.model.exceptions.dao_exceptions.NullFieldException;
-import brytskyi.week6.sql.notebook_shop.model.production.*;
-import brytskyi.week6.sql.notebook_shop.model.selling.Prodaja;
-import brytskyi.week6.sql.notebook_shop.model.users.Buyer;
-import brytskyi.week6.sql.notebook_shop.model.users.Contacts;
-import brytskyi.week6.sql.notebook_shop.model.users.Seller;
+import brytskyi.week6_7.sql.notebook_shop.dao.sql_dao.hibernateMySqlDao.HibernateMySqlDao;
+import brytskyi.week6_7.sql.notebook_shop.model.exceptions.dao_exceptions.NullFieldException;
+import brytskyi.week6_7.sql.notebook_shop.model.production.*;
+import brytskyi.week6_7.sql.notebook_shop.model.selling.Prodaja;
+import brytskyi.week6_7.sql.notebook_shop.model.users.Buyer;
+import brytskyi.week6_7.sql.notebook_shop.model.users.Contacts;
+import brytskyi.week6_7.sql.notebook_shop.model.users.Seller;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;

@@ -1,15 +1,23 @@
-package week6.sql.networkshop.dao.sql_dao;
+package week8.spring.notebook_shop.dao.sql_dao;
 
-import brytskyi.week6_7.sql.notebook_shop.dao.sql_dao.simpleMySqlDao.MySQL_DAO;
-import brytskyi.week6_7.sql.notebook_shop.dao.sql_dao.simpleMySqlDao.MySqlDAOWithConnection;
-import brytskyi.week6_7.sql.notebook_shop.model.exceptions.dao_exceptions.NullFieldException;
-import brytskyi.week6_7.sql.notebook_shop.model.production.*;
-import brytskyi.week6_7.sql.notebook_shop.model.selling.Prodaja;
-import brytskyi.week6_7.sql.notebook_shop.model.users.Buyer;
-import brytskyi.week6_7.sql.notebook_shop.model.users.Contacts;
-import brytskyi.week6_7.sql.notebook_shop.model.users.Seller;
-import org.junit.*;
+import brytskyi.week8.spring.notebook_shop.dao.sql_dao.hibernateMySqlDao.HibernateMySqlDao;
+import brytskyi.week8.spring.notebook_shop.model.exceptions.controller_exceptions.WrongLoginDataException;
+import brytskyi.week8.spring.notebook_shop.model.exceptions.dao_exceptions.NullFieldException;
+import brytskyi.week8.spring.notebook_shop.model.production.*;
+import brytskyi.week8.spring.notebook_shop.model.selling.Prodaja;
+import brytskyi.week8.spring.notebook_shop.model.users.Buyer;
+import brytskyi.week8.spring.notebook_shop.model.users.Contacts;
+import brytskyi.week8.spring.notebook_shop.model.users.Seller;
+import brytskyi.week8.spring.notebook_shop.services.CommonServiceWithToken;
+import brytskyi.week8.spring.notebook_shop.services.ICommonServiceWithToken;
+import org.hamcrest.core.CombinableMatcher;
+import org.junit.Assert;
+import org.junit.BeforeClass;
+import org.junit.FixMethodOrder;
+import org.junit.Test;
 import org.junit.runners.MethodSorters;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -23,9 +31,10 @@ import java.util.NoSuchElementException;
  */
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class TestMySqlSimpleDao {
+public class TestHibernateDao {
 
-    private static MySQL_DAO dao = null;
+    private static HibernateMySqlDao dao = null;
+    private static ICommonServiceWithToken serviceWithToken = null;
     private static Display display;
     private static HardMemory hardMemory;
     private static OperativeMemory operativeMemory;
@@ -39,9 +48,9 @@ public class TestMySqlSimpleDao {
 
     @BeforeClass
     public static void initDao() {
-            dao = new MySQL_DAO(new MySqlDAOWithConnection());
+        ApplicationContext context = new ClassPathXmlApplicationContext("classpath:week8/notebook_shop_context.xml");
+        dao = context.getBean(HibernateMySqlDao.class);
     }
-
 
     @Test
     public void _01testAddNoteBookModel() {
@@ -216,13 +225,6 @@ public class TestMySqlSimpleDao {
         }
 
           /*if have null field*/
-        try {
-            notebookType.setHardMemory(null);
-            NotebookType added = dao.addNotebookType(notebookType);
-        } catch (NullFieldException e) {
-            e.printStackTrace();
-            Assert.assertTrue(true);
-        }
     }
 
     @Test
@@ -465,7 +467,7 @@ public class TestMySqlSimpleDao {
 
         System.out.println("buyer" + buyer.getId());
         System.out.println("seller" + seller.getId());
-        Prodaja prodaja = dao.addProdaja( notebookForSail.getId(),buyer.getId(), seller.getId());
+        Prodaja prodaja = dao.addProdaja(notebookForSail.getId(), buyer.getId(), seller.getId());
         List prodajas1 = dao.getProdajasBuyer(buyer.getId(), start, end);
         List prodajas2 = dao.getProdajasSeller(seller.getId(), start, end);
         Assert.assertEquals(prodajas1.get(0), prodajas2.get(0));

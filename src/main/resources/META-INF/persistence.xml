@@ -12,18 +12,18 @@
 
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
 
-        <class>brytskyi.week6.sql.notebook_shop.model.production.Display</class>
-        <class>brytskyi.week6.sql.notebook_shop.model.production.HardMemory</class>
-        <class>brytskyi.week6.sql.notebook_shop.model.production.OperativeMemory</class>
-        <class>brytskyi.week6.sql.notebook_shop.model.production.VideoMemory</class>
-        <class>brytskyi.week6.sql.notebook_shop.model.production.Processor</class>
-        <class>brytskyi.week6.sql.notebook_shop.model.production.NotebookType</class>
-        <class>brytskyi.week6.sql.notebook_shop.model.production.NotebookForSail</class>
-        <class>brytskyi.week6.sql.notebook_shop.model.production.Partiya</class>
-        <class>brytskyi.week6.sql.notebook_shop.model.selling.Prodaja</class>
-        <class>brytskyi.week6.sql.notebook_shop.model.users.Seller</class>
-        <class>brytskyi.week6.sql.notebook_shop.model.users.Buyer</class>
-        <class>brytskyi.week6.sql.notebook_shop.model.users.Contacts</class>
+        <class>brytskyi.week6_7.sql.notebook_shop.model.production.Display</class>
+        <class>brytskyi.week6_7.sql.notebook_shop.model.production.HardMemory</class>
+        <class>brytskyi.week6_7.sql.notebook_shop.model.production.OperativeMemory</class>
+        <class>brytskyi.week6_7.sql.notebook_shop.model.production.VideoMemory</class>
+        <class>brytskyi.week6_7.sql.notebook_shop.model.production.Processor</class>
+        <class>brytskyi.week6_7.sql.notebook_shop.model.production.NotebookType</class>
+        <class>brytskyi.week6_7.sql.notebook_shop.model.production.NotebookForSail</class>
+        <class>brytskyi.week6_7.sql.notebook_shop.model.production.Partiya</class>
+        <class>brytskyi.week6_7.sql.notebook_shop.model.selling.Prodaja</class>
+        <class>brytskyi.week6_7.sql.notebook_shop.model.users.Seller</class>
+        <class>brytskyi.week6_7.sql.notebook_shop.model.users.Buyer</class>
+        <class>brytskyi.week6_7.sql.notebook_shop.model.users.Contacts</class>
 
 
         <properties>
